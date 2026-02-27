@@ -13,6 +13,13 @@ const games = [
         "thumbnail": "https://picsum.photos/seed/sandbox/400/300",
         "url": "https://n-p362fv5ls2s4s6m33lwz3axlmpr4eykich4bcqi-0lu-script.googleusercontent.com/userCodeAppPanel",
         "sandbox": "allow-downloads allow-forms allow-modals allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts allow-top-navigation-by-user-activation allow-storage-access-by-user-activation"
+    },
+    {
+        "id": "roblox",
+        "title": "Roblox",
+        "description": "The ultimate virtual universe that lets you create, share experiences with friends, and be anything you can imagine.",
+        "thumbnail": "https://picsum.photos/seed/roblox/400/300",
+        "url": "https://now.gg/play/roblox-corporation/5349/roblox"
     }
 ];
 
