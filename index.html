@@ -1,13 +1,149 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Unblocked Games Hub</title>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="src/main.jsx"></script>
-  </body>
-</html>
+    <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+        
+        :root {
+            --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+        }
 
+        body {
+            font-family: var(--font-sans);
+            background-color: #09090b;
+            color: #f4f4f5;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .glass {
+            background: rgba(24, 24, 27, 0.5);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .game-card {
+            transition: all 0.3s ease;
+        }
+
+        .game-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 25px -5px rgba(16, 185, 129, 0.1);
+        }
+
+        /* Hide scrollbar for Chrome, Safari and Opera */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+
+        /* Hide scrollbar for IE, Edge and Firefox */
+        .no-scrollbar {
+            -ms-overflow-style: none;  /* IE and Edge */
+            scrollbar-width: none;  /* Firefox */
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col">
+    <!-- Header -->
+    <header class="sticky top-0 z-50 glass border-b border-white/5 px-4 py-3 sm:px-8">
+        <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div id="logo" class="flex items-center gap-2 cursor-pointer group">
+                <div class="bg-emerald-500 p-2 rounded-lg group-hover:rotate-12 transition-transform">
+                    <i data-lucide="gamepad-2" class="w-6 h-6 text-zinc-950"></i>
+                </div>
+                <h1 class="text-xl font-bold tracking-tight">
+                    UNBLOCKED<span class="text-emerald-500">GAMES</span>
+                </h1>
+            </div>
+
+            <div id="search-container" class="relative w-full sm:w-96">
+                <i data-lucide="search" class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500"></i>
+                <input
+                    id="search-input"
+                    type="text"
+                    placeholder="Search games..."
+                    class="w-full bg-zinc-800/50 border border-white/10 rounded-full py-2 pl-10 pr-4 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 transition-all"
+                />
+            </div>
+
+            <button id="back-button" class="hidden flex items-center gap-2 text-zinc-400 hover:text-white transition-colors">
+                <i data-lucide="arrow-left" class="w-4 h-4"></i>
+                <span>Back to Library</span>
+            </button>
+        </div>
+    </header>
+
+    <main class="flex-1 p-4 sm:p-8 max-w-7xl mx-auto w-full">
+        <!-- Library View -->
+        <div id="library-view" class="space-y-8">
+            <div class="flex flex-col gap-2">
+                <h2 class="text-3xl font-bold">Game Library</h2>
+                <p class="text-zinc-500">Choose a game and start playing instantly.</p>
+            </div>
+
+            <div id="games-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Games will be injected here -->
+            </div>
+
+            <div id="no-results" class="hidden text-center py-20 glass rounded-3xl">
+                <p class="text-zinc-500 text-lg">No games found matching your search.</p>
+            </div>
+        </div>
+
+        <!-- Player View -->
+        <div id="player-view" class="hidden flex flex-col gap-6 h-full">
+            <div class="flex items-center justify-between">
+                <div class="flex flex-col">
+                    <h2 id="player-title" class="text-3xl font-bold text-emerald-400"></h2>
+                    <p id="player-desc" class="text-zinc-400"></p>
+                </div>
+                <div class="flex gap-2">
+                    <button id="fullscreen-btn" class="p-3 glass rounded-xl hover:bg-zinc-800 transition-colors" title="Toggle Fullscreen">
+                        <i data-lucide="maximize-2" class="w-5 h-5"></i>
+                    </button>
+                    <a id="external-link" href="#" target="_blank" rel="noopener noreferrer" class="p-3 glass rounded-xl hover:bg-zinc-800 transition-colors" title="Open in New Tab">
+                        <i data-lucide="external-link" class="w-5 h-5"></i>
+                    </a>
+                </div>
+            </div>
+
+            <div class="relative w-full aspect-video glass rounded-3xl overflow-hidden shadow-2xl shadow-emerald-500/5">
+                <iframe id="game-iframe" class="w-full h-full border-none" allow="autoplay; fullscreen; keyboard"></iframe>
+            </div>
+
+            <div class="glass p-6 rounded-2xl flex items-center justify-between">
+                <div class="flex items-center gap-4">
+                    <div class="bg-emerald-500/10 p-3 rounded-full">
+                        <i data-lucide="gamepad-2" class="w-6 h-6 text-emerald-500"></i>
+                    </div>
+                    <div>
+                        <p class="font-semibold">Controls</p>
+                        <p class="text-sm text-zinc-500">Use your keyboard and mouse to play.</p>
+                    </div>
+                </div>
+                <button id="close-game-btn" class="px-6 py-2 bg-zinc-800 hover:bg-zinc-700 rounded-full transition-colors font-medium">
+                    Close Game
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="mt-auto py-8 px-4 border-t border-white/5 text-center text-zinc-600 text-sm">
+        <div class="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-4">
+            <p>© 2026 Unblocked Games Hub. All rights reserved.</p>
+            <div class="flex gap-6">
+                <a href="#" class="hover:text-zinc-400 transition-colors">Privacy Policy</a>
+                <a href="#" class="hover:text-zinc-400 transition-colors">Terms of Service</a>
+                <a href="#" class="hover:text-zinc-400 transition-colors">Contact</a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

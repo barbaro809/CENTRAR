@@ -1,0 +1,158 @@
+const games = [
+    {
+        "id": "2048",
+        "title": "2048",
+        "description": "Join the numbers and get to the 2048 tile!",
+        "thumbnail": "https://picsum.photos/seed/2048/400/300",
+        "url": "https://play2048.co/"
+    },
+    {
+        "id": "flappy-bird",
+        "title": "Flappy Bird",
+        "description": "Fly through the pipes without hitting them.",
+        "thumbnail": "https://picsum.photos/seed/flappy/400/300",
+        "url": "https://flappybird.io/"
+    },
+    {
+        "id": "tetris",
+        "title": "Tetris",
+        "description": "The classic block-stacking puzzle game.",
+        "thumbnail": "https://picsum.photos/seed/tetris/400/300",
+        "url": "https://tetris.com/play-tetris"
+    },
+    {
+        "id": "dino-run",
+        "title": "Dino Run",
+        "description": "The classic offline dinosaur game.",
+        "thumbnail": "https://picsum.photos/seed/dino/400/300",
+        "url": "https://chromedino.com/"
+    },
+    {
+        "id": "snake",
+        "title": "Snake",
+        "description": "Eat the apples and grow as long as possible.",
+        "thumbnail": "https://picsum.photos/seed/snake/400/300",
+        "url": "https://www.google.com/logos/2010/pacman10-i.html"
+    },
+    {
+        "id": "paper-io",
+        "title": "Paper.io 2",
+        "description": "Conquer as much territory as possible.",
+        "thumbnail": "https://picsum.photos/seed/paperio/400/300",
+        "url": "https://paper-io.com/"
+    }
+];
+
+// DOM Elements
+const gamesGrid = document.getElementById('games-grid');
+const searchInput = document.getElementById('search-input');
+const noResults = document.getElementById('no-results');
+const libraryView = document.getElementById('library-view');
+const playerView = document.getElementById('player-view');
+const searchContainer = document.getElementById('search-container');
+const backButton = document.getElementById('back-button');
+const logo = document.getElementById('logo');
+
+const playerTitle = document.getElementById('player-title');
+const playerDesc = document.getElementById('player-desc');
+const gameIframe = document.getElementById('game-iframe');
+const externalLink = document.getElementById('external-link');
+const fullscreenBtn = document.getElementById('fullscreen-btn');
+const closeGameBtn = document.getElementById('close-game-btn');
+
+// Initialize Icons
+lucide.createIcons();
+
+// Render Games
+function renderGames(filteredGames) {
+    gamesGrid.innerHTML = '';
+    
+    if (filteredGames.length === 0) {
+        noResults.classList.remove('hidden');
+    } else {
+        noResults.classList.add('hidden');
+        filteredGames.forEach(game => {
+            const card = document.createElement('div');
+            card.className = 'game-card glass rounded-2xl overflow-hidden cursor-pointer group flex flex-col';
+            card.innerHTML = `
+                <div class="aspect-video relative overflow-hidden">
+                    <img
+                        src="${game.thumbnail}"
+                        alt="${game.title}"
+                        class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                        referrerpolicy="no-referrer"
+                    />
+                    <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                        <div class="bg-emerald-500 p-4 rounded-full scale-75 group-hover:scale-100 transition-transform duration-300">
+                            <i data-lucide="play" class="w-8 h-8 text-zinc-950 fill-current"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-5 flex-1 flex flex-col gap-2">
+                    <h3 class="text-xl font-bold group-hover:text-emerald-400 transition-colors">
+                        ${game.title}
+                    </h3>
+                    <p class="text-zinc-400 text-sm line-clamp-2">
+                        ${game.description}
+                    </p>
+                </div>
+            `;
+            card.onclick = () => openGame(game);
+            gamesGrid.appendChild(card);
+        });
+        lucide.createIcons();
+    }
+}
+
+// Open Game
+function openGame(game) {
+    libraryView.classList.add('hidden');
+    searchContainer.classList.add('hidden');
+    playerView.classList.remove('hidden');
+    backButton.classList.remove('hidden');
+
+    playerTitle.textContent = game.title;
+    playerDesc.textContent = game.description;
+    gameIframe.src = game.url;
+    externalLink.href = game.url;
+    
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// Close Game
+function closeGame() {
+    libraryView.classList.remove('hidden');
+    searchContainer.classList.remove('hidden');
+    playerView.classList.add('hidden');
+    backButton.classList.add('hidden');
+    gameIframe.src = '';
+}
+
+// Search Logic
+searchInput.oninput = (e) => {
+    const query = e.target.value.toLowerCase();
+    const filtered = games.filter(game => 
+        game.title.toLowerCase().includes(query) || 
+        game.description.toLowerCase().includes(query)
+    );
+    renderGames(filtered);
+};
+
+// Fullscreen Logic
+fullscreenBtn.onclick = () => {
+    if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen();
+    } else {
+        if (document.exitFullscreen) {
+            document.exitFullscreen();
+        }
+    }
+};
+
+// Event Listeners
+backButton.onclick = closeGame;
+closeGameBtn.onclick = closeGame;
+logo.onclick = closeGame;
+
+// Initial Render
+renderGames(games);
