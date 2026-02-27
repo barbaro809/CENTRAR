@@ -5,6 +5,14 @@ const games = [
         "description": "A custom game added via iframe.",
         "thumbnail": "https://picsum.photos/seed/usergame/400/300",
         "url": "/blank"
+    },
+    {
+        "id": "sandbox-game",
+        "title": "Sandbox Game",
+        "description": "A game running in a secure sandbox environment.",
+        "thumbnail": "https://picsum.photos/seed/sandbox/400/300",
+        "url": "https://n-p362fv5ls2s4s6m33lwz3axlmpr4eykich4bcqi-0lu-script.googleusercontent.com/userCodeAppPanel",
+        "sandbox": "allow-downloads allow-forms allow-modals allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts allow-top-navigation-by-user-activation allow-storage-access-by-user-activation"
     }
 ];
 
@@ -78,6 +86,13 @@ function openGame(game) {
 
     playerTitle.textContent = game.title;
     playerDesc.textContent = game.description;
+    
+    if (game.sandbox) {
+        gameIframe.setAttribute('sandbox', game.sandbox);
+    } else {
+        gameIframe.removeAttribute('sandbox');
+    }
+    
     gameIframe.src = game.url;
     externalLink.href = game.url;
     
@@ -91,6 +106,7 @@ function closeGame() {
     playerView.classList.add('hidden');
     backButton.classList.add('hidden');
     gameIframe.src = '';
+    gameIframe.removeAttribute('sandbox');
 }
 
 // Search Logic
